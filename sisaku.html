@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>数字当て</title>
+        <style type="text/css">
+            html{
+                font-size: 100%;
+            }
+            body{
+                background: #E1EEC1;
+                font-family: sans-seruf;
+            }
+            .choice{
+                appearance: none;
+                border: 0;
+                border-radius: 5px;
+                background: #97CDF3;
+                color: #FEFEFE;
+                margin: 5px;
+                padding: 8px 16px;
+                min-width: 30px;
+                font-family: inherit;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .choice:hover{
+                background: #009BC6;
+            }
+            .choice:focus {
+                outline: none;
+                box-shadow: 0 0 0 4px #EAF6FD;
+            }
+            .container{
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        </style>
+        <script type="text/javascript">
+            const array = {
+                question: "xの<a href='https://ja.wikipedia.org/wiki/%E8%87%AA%E4%B9%97'>自乗</a>はxと等しいですか?",choices:[
+                    {
+                        text: "はい",
+                        data: {
+                            question: "答えは1ですね!",choices:[]
+                        }
+                    },
+                    {
+                        text: "いいえ",
+                        data: {
+                            question: "xを3で割った余りはいくつですか?",choices:[
+                                {
+                                    text: "0",
+                                    data: {
+                                        question: "答えは3ですね!",choices:[]
+                                    }
+                                },
+                                {
+                                    text: "1",
+                                    data: {
+                                        question: "答えは4ですね!",choices:[]
+                                    }
+                                },
+                                {
+                                    text: "2",
+                                    data: {
+                                        question: "答えは2ですね!",choices:[]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            };
+            var choices = [];
+            function update(i){
+                choices.push(i);
+                display();
+            }
+            function back(){
+                choices.pop();
+                display();
+            }
+            function display() {
+                var question = array;
+                for(let i = 0;i < choices.length;i++){
+                    question = question.choices[choices[i]].data;
+                }
+                document.getElementById("question").innerHTML = question.question;
+                for (let i = document.getElementById("choices").childNodes.length - 1;i >= 0;i--){
+                    document.getElementById("choices").removeChild(
+                        document.getElementById("choices").childNodes[i]
+                    );
+                }
+                for(let i = 0;i < question.choices.length;i++){
+                    const button = document.createElement("input");
+                    button.setAttribute("type","button");
+                    button.setAttribute("value",question.choices[i].text);
+                    button.setAttribute("onclick","update(" + i + ")");
+                    button.setAttribute("class","choice");
+                    document.getElementById("choices").appendChild(button);
+                }
+                if(choices.length > 0){
+                    const button = document.createElement("input");
+                    button.setAttribute("type","button");
+                    button.setAttribute("value","戻る");
+                    button.setAttribute("onclick","back()");
+                    button.setAttribute("class","choice");
+                    document.getElementById("choices").appendChild(button);
+                }
+            }
+            window.onload = function(){
+                display();
+            }
+        </script>
+    </head>
+    <body>
+        <p>1以上4以下のあなたが思い浮かべた自然数xを当てます.</p>
+        <p id="question"></p>
+        <div id="choices" class="container"></div>
+    </body>
+</html>
